@@ -15,9 +15,6 @@ app.secret_key = config.SECRET_KEY
 
 # HELPERS
 
-ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif"}
-UPLOADS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static", "uploads")
-
 def slugify(text: str) -> str:
     text = text.lower().strip()
     text = re.sub(r"[^\w\s-]", "", text)
@@ -79,7 +76,7 @@ def login_required(f):
     return decorated
 
 def allowed_file(filename: str) -> bool:
-    return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
+    return "." in filename and filename.rsplit(".", 1)[1].lower() in config.ALLOWED_EXTENSIONS
 
 def save_thumbnail(file) -> str | None:
     if not file or file.filename == "":
@@ -87,8 +84,8 @@ def save_thumbnail(file) -> str | None:
     if not allowed_file(file.filename):
         return None
     filename = secure_filename(file.filename)
-    os.makedirs(UPLOADS_DIR, exist_ok=True)
-    file.save(os.path.join(UPLOADS_DIR, filename))
+    os.makedirs(config.UPLOADS_DIR, exist_ok=True)
+    file.save(os.path.join(config.UPLOADS_DIR, filename))
     return filename
 
 
