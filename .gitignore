@@ -1,3 +1,4 @@
 env
 __pycache__
 articles/*.md !/README.md
+static/uploads/*.png

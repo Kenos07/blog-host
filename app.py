@@ -15,7 +15,7 @@ app.secret_key = config.SECRET_KEY
 
 # HELPERS
 
-ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg"}
+ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif"}
 UPLOADS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static", "uploads")
 
 def slugify(text: str) -> str:
@@ -89,6 +89,7 @@ def save_thumbnail(file) -> str | None:
     filename = secure_filename(file.filename)
     os.makedirs(UPLOADS_DIR, exist_ok=True)
     file.save(os.path.join(UPLOADS_DIR, filename))
+    return filename
 
 
 # GUEST ROUTE

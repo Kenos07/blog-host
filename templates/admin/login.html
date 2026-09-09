@@ -8,6 +8,7 @@
         {% if error %}
             <div class="flash flash--error">{{ error }}</div>
         {% endif %}
+        
         <form method="POST" action="{{ url_for('admin_login') }}" class="form">
             <div class="form__group">
                 <label for="username" class="form__label">Username</label>

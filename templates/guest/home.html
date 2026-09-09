@@ -11,17 +11,32 @@
     <div class="article-list">
         {% for article in articles %}
         <article class="article-card">
-            <div class="article-card__meta">
-            <time datetime="{{ article.published_at }}">{{ article.published_at }}</time>
+            {% if article.thumbnail %}
+
+            <a href="{{ url_for('article', slug=article.slug) }}" class="article-card__thumb-link">
+                <img
+                src="{{ url_for('static', filename='uploads/' + article.thumbnail) }}"
+                alt="{{ article.title }}"
+                class="article-card__thumb"
+                />
+            </a>
+
+            {% endif %}
+
+            <div class="article-card__body">
+                <div class="article-card__meta">
+                    <time datetime="{{ article.published_at }}">{{ article.published_at }}</time>
+                </div>
+                <h2 class="article-card__title">
+                    <a href="{{ url_for('article', slug=article.slug) }}">{{ article.title }}</a>
+                </h2>
+                <p class="article-card__excerpt">
+                    {{ article.content | truncate(160, True, '…') }}
+                </p>
+                <a href="{{ url_for('article', slug=article.slug) }}" class="btn btn--ghost">Read more →</a>
             </div>
-            <h2 class="article-card__title">
-            <a href="{{ url_for('article', slug=article.slug) }}">{{ article.title }}</a>
-            </h2>
-            <p class="article-card__excerpt">
-            {{ article.content | truncate(160, True, '…') }}
-            </p>
-            <a href="{{ url_for('article', slug=article.slug) }}" class="btn btn--ghost">Read more →</a>
         </article>
+        
         {% endfor %}
     </div>
 {% else %}

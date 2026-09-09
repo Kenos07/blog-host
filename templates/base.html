@@ -10,18 +10,17 @@
 
     <header class="site-header">
         <div class="container">
-        <a href="{{ url_for('home') }}" class="site-title">📝 My Blog</a>
+            <a href="{{ url_for('home') }}" class="site-title">📝 My Blog</a>
 
-        <nav class="site-nav">
-            <a href="{{ url_for('home') }}">Home</a>
-            {% if session.get('admin') %}
-            <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
-            <a href="{{ url_for('admin_logout') }}">Logout</a>
-            {% else %}
-            <a href="{{ url_for('admin_login') }}">Admin</a>
-            {% endif %}
-        </nav>
-
+            <nav class="site-nav">
+                <a href="{{ url_for('home') }}">Home</a>
+                {% if session.get('admin') %}
+                <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+                <a href="{{ url_for('admin_logout') }}">Logout</a>
+                {% else %}
+                <a href="{{ url_for('admin_login') }}">Admin</a>
+                {% endif %}
+            </nav>
         </div>
     </header>
 
