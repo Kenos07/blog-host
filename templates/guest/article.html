@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}{{ article.title }} — My Blog{% endblock %}
+{% block content %}
+
+<article class="article-full">
+    <header class="article-full__header">
+        <a href="{{ url_for('home') }}" class="back-link">← Back to all articles</a>
+        <h1 class="article-full__title">{{ article.title }}</h1>
+        <time class="article-full__date" datetime="{{ article.published_at }}">
+        Published on {{ article.published_at }}
+        </time>
+    </header>
+
+    <div class="article-full__body">
+        {% for paragraph in article.content.split('\n') %}
+        {% if paragraph.strip() %}
+            <p>{{ paragraph }}</p>
+        {% endif %}
+        {% endfor %}
+    </div>
+</article>
+
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Admin Login — My Blog{% endblock %}
+{% block content %}
+
+<div class="auth-wrapper">
+    <div class="auth-card">
+        <h1 class="auth-card__title">Admin Login</h1>
+        {% if error %}
+            <div class="flash flash--error">{{ error }}</div>
+        {% endif %}
+        <form method="POST" action="{{ url_for('admin_login') }}" class="form">
+            <div class="form__group">
+                <label for="username" class="form__label">Username</label>
+                <input
+                type="text"
+                id="username"
+                name="username"
+                class="form__input"
+                required
+                autofocus
+                />
+            </div>
+
+            <div class="form__group">
+                <label for="password" class="form__label">Password</label>
+                <input
+                type="password"
+                id="password"
+                name="password"
+                class="form__input"
+                required
+                />
+            </div>
+            <button type="submit" class="btn btn--primary btn--full">Log In</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

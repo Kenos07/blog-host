@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Home — My Blog{% endblock %}
+{% block content %}
+
+<section class="page-hero">
+    <h1>Welcome to My Blog</h1>
+    <p class="subtitle">Thoughts, stories, and ideas.</p>
+</section>
+
+{% if articles %}
+    <div class="article-list">
+        {% for article in articles %}
+        <article class="article-card">
+            <div class="article-card__meta">
+            <time datetime="{{ article.published_at }}">{{ article.published_at }}</time>
+            </div>
+            <h2 class="article-card__title">
+            <a href="{{ url_for('article', slug=article.slug) }}">{{ article.title }}</a>
+            </h2>
+            <p class="article-card__excerpt">
+            {{ article.content | truncate(160, True, '…') }}
+            </p>
+            <a href="{{ url_for('article', slug=article.slug) }}" class="btn btn--ghost">Read more →</a>
+        </article>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="empty-state">
+        <p>No articles published yet. Check back soon!</p>
+    </div>
+{% endif %}
+
+{% endblock %}

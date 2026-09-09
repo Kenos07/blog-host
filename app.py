@@ -55,7 +55,7 @@ def list_articles() -> list[dict]:
     articles = []
     for fname in os.listdir(config.ARTICLES_DIR):
         if fname.endswith(".md"):
-            slug = fname[:-5]
+            slug = fname[:-3]
             article = load_article(slug)
             if article:
                 articles.append(article)
@@ -203,4 +203,4 @@ def page_not_found(e):
 
 if __name__ == "__main__":
     os.makedirs(config.ARTICLES_DIR, exist_ok=True)
-    app.run()
+    app.run(debug=True)
