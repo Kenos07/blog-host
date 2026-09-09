@@ -12,11 +12,7 @@
     </header>
 
     <div class="article-full__body">
-        {% for paragraph in article.content.split('\n') %}
-        {% if paragraph.strip() %}
-            <p>{{ paragraph }}</p>
-        {% endif %}
-        {% endfor %}
+        {{ article.content_html || safe }}
     </div>
 </article>
 

@@ -49,15 +49,32 @@
         </div>
 
         <div class="form__group">
-        <label for="content" class="form__label">Content <span class="required">*</span></label>
-        <textarea
-            id="content"
-            name="content"
-            class="form__textarea"
-            rows="18"
-            required
-            placeholder="Write your article here…"
-        >{{ content }}</textarea>
+            <div class="editor-label-row">
+                <label for="content" class="form__label">Content <span class="required">*</span></label>
+                <div class="media-toolbar">
+                    <button type="button" id="insertMediaBtn" class="btn btn--sm btn--ghost" title="Upload and insert an image or video at the cursor">
+                        📎 Insert Media
+                    </button>
+                    <span id="uploadStatus" class="upload-status"></span>
+                    <input
+                        type="file"
+                        id="mediaFileInput"
+                        style="display:none"
+                        accept="image/png,image/jpeg,image/gif,image/webp,image/avif,video/mp4,video/webm,video/ogg,video/quicktime"
+                    />
+                </div>
+            </div>
+
+            <textarea
+                id="content"
+                name="content"
+                class="form__textarea"
+                rows="20"
+                required
+                placeholder="Write your article here… Use Markdown for formatting, or click Insert Media to embed"
+            >{{ content }}</textarea>
+
+            <span class="form__hint">Supports Markdown: **bold**, *italic*, ## headings, - lists, `code`</span>
         </div>
 
         <div class="form__actions">
@@ -68,4 +85,8 @@
     </form>
 </div>
 
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ url_for('static', filename='editor.js') }}"></script>
 {% endblock %}

@@ -3,8 +3,9 @@ import os, re
 import frontmatter
 from datetime import date
 from functools import wraps
+import markdown as md
 
-from flask import (Flask, render_template, request, redirect, url_for, session, flash, abort)
+from flask import (Flask, render_template, request, redirect, url_for, session, flash, abort, jsonify)
 
 from werkzeug.utils import secure_filename
 
@@ -75,8 +76,11 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated
 
+def _ext(filename: str) -> str:
+    return filename.rsplit(".", 1)[-1].lower() if "." in filename else ""
+
 def allowed_file(filename: str) -> bool:
-    return "." in filename and filename.rsplit(".", 1)[1].lower() in config.ALLOWED_EXTENSIONS
+    return _ext(filename) in config.IMAGE_EXTENSIONS
 
 def save_thumbnail(file) -> str | None:
     if not file or file.filename == "":
@@ -88,6 +92,17 @@ def save_thumbnail(file) -> str | None:
     file.save(os.path.join(config.UPLOADS_DIR, filename))
     return filename
 
+def save_media(file) -> tuple[str, str] | None:
+    if not file or file.filename == "":
+        return None
+    ext = _ext(file.filename)
+    if ext not in config.MEDIA_EXTENSIONS:
+        return None
+    filename = secure_filename(file.filename)
+    os.makedirs(config.UPLOADS_DIR, exist_ok=True)
+    file.save(os.path.join(config.UPLOADS_DIR, filename))
+    media_type = "video" if ext in config.VIDEO_EXTENSIONS else "image"
+    return filename, media_type
 
 # GUEST ROUTE
 
@@ -101,9 +116,24 @@ def article(slug):
     art = load_article(slug)
     if art is None:
         abort(404)
+    art["content_html"] = md.markdown(
+        art["content"],
+        extensions=["extra", "nl2br"]
+    )
     return render_template("guest/article.html", article=art)
 
 # ADMIN ROUTES
+@app.route("/admin/upload", methods=["POST"])
+@login_required
+def admin_upload():
+    file = request.files.get("file")
+    result = save_media(file)
+    if result is None:
+        allowed = ", ".join(sorted(config.MEDIA_EXTENSIONS))
+        return jsonify({"error": f"No file or unsupported type. Allowed: {allowed}"}), 400
+    filename, media_type = result
+    file_url = url_for("static", filename=f"uploads/{filename}")
+    return jsonify({"url": file_url, "filename": filename, "type": media_type})
 
 @app.route("/admin/login", methods=["GET", "POST"])
 def admin_login():
