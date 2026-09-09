@@ -1,7 +1,7 @@
 import os, re
 
 import frontmatter
-from datetime import date
+import datetime as dt
 from functools import wraps
 import markdown as md
 
@@ -35,7 +35,7 @@ def load_article(slug: str) -> dict | None:
     return {
         "title": post.metadata.get("title", ""),
         "slug": post.metadata.get("slug", slug),
-        "published_at": str(post.metadata.get("published_at", "")),
+        "published_at": _normalize_datetime(post.metadata.get("published_at", "")),
         "thumbnail": post.metadata.get("thumbnail", ""),
         "content": post.content,
     }
@@ -104,6 +104,24 @@ def save_media(file) -> tuple[str, str] | None:
     media_type = "video" if ext in config.VIDEO_EXTENSIONS else "image"
     return filename, media_type
 
+def _normalize_datetime(value) -> str:
+    if isinstance(value, dt.datetime):
+        return value.strftime("%Y-%m-%dT%H:%M")
+    if isinstance(value, dt.date):
+        return value.strftime("%Y-%m-%dT00:00")
+    
+    s = str(value).strip()
+    if len(s) == 10:
+        return s + "T00:00"
+    return s[:16]
+
+@app.template_filter("format_date")
+def format_date(value: str) -> str:
+    try:
+        return dt.datetime.fromisoformat(value).strftime("%B %-d, %Y")
+    except (ValueError, TypeError):
+        return str(value)
+
 # GUEST ROUTE
 
 @app.route("/")
@@ -167,7 +185,8 @@ def admin_add():
     if request.method == "POST":
         title = request.form.get("title", "").strip()
         content = request.form.get("content", "").strip()
-        published_at = request.form.get("published_at", str(date.today()))
+        published_at = request.form.get("published_at", dt.datetime.now().strftime("%Y-%m-%dT%H:%M"))
+
         if not title or not content:
             flash("Title and content are required.", "error")
             return render_template(
@@ -200,7 +219,7 @@ def admin_add():
         "admin/add.html",
         title="",
         content="",
-        published_at=str(date.today()),
+        published_at=str(dt.datetime.now().strftime("%Y-%m-%dT%H:%M")),
         thumbnail="",
     )
 

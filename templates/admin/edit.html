@@ -24,12 +24,12 @@
         </div>
 
         <div class="form__group">
-            <label for="published_at" class="form__label">Publication Date <span class="required">*</span></label>
+            <label for="published_at" class="form__label">Publication Date &amp; Time <span class="required">*</span></label>
             <input
-                type="date"
+                type="datetime-local"
                 id="published_at"
                 name="published_at"
-                class="form__input form__input--date"
+                class="form__input form__input--datetime"
                 value="{{ published_at }}"
                 required
             />

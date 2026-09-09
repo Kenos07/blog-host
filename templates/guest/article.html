@@ -7,7 +7,7 @@
         <a href="{{ url_for('home') }}" class="back-link">← Back to all articles</a>
         <h1 class="article-full__title">{{ article.title }}</h1>
         <time class="article-full__date" datetime="{{ article.published_at }}">
-        Published on {{ article.published_at }}
+        Published on {{ article.published_at | format_date }}
         </time>
     </header>
 

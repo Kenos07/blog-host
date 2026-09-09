@@ -438,7 +438,7 @@ img {
     box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
 }
 
-.form__input--date { max-width: 200px; }
+.form__input--datetime { max-width: 200px; }
 
 .form__textarea {
     resize: vertical;
