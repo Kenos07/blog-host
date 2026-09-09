@@ -6,12 +6,17 @@ from functools import wraps
 
 from flask import (Flask, render_template, request, redirect, url_for, session, flash, abort)
 
+from werkzeug.utils import secure_filename
+
 import config
 
 app = Flask(__name__)
 app.secret_key = config.SECRET_KEY
 
 # HELPERS
+
+ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg"}
+UPLOADS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static", "uploads")
 
 def slugify(text: str) -> str:
     text = text.lower().strip()
@@ -28,10 +33,12 @@ def load_article(slug: str) -> dict | None:
     if not os.path.exists(path):
         return None
     post = frontmatter.load(path)
+    
     return {
         "title": post.metadata.get("title", ""),
         "slug": post.metadata.get("slug", slug),
         "published_at": str(post.metadata.get("published_at", "")),
+        "thumbnail": post.metadata.get("thumbnail", ""),
         "content": post.content,
     }
 
@@ -41,6 +48,7 @@ def save_article(data: dict) -> None:
         title=data["title"],
         slug=data["slug"],
         published_at=data["published_at"],
+        thumbnail=data.get("thumbnail", "")
     )
     path = article_path(data["slug"])
     with open(path, "w", encoding="utf-8") as f:
@@ -69,6 +77,19 @@ def login_required(f):
             return redirect(url_for("admin_login"))
         return f(*args, **kwargs)
     return decorated
+
+def allowed_file(filename: str) -> bool:
+    return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
+
+def save_thumbnail(file) -> str | None:
+    if not file or file.filename == "":
+        return None
+    if not allowed_file(file.filename):
+        return None
+    filename = secure_filename(file.filename)
+    os.makedirs(UPLOADS_DIR, exist_ok=True)
+    file.save(os.path.join(UPLOADS_DIR, filename))
+
 
 # GUEST ROUTE
 
@@ -126,29 +147,33 @@ def admin_add():
                 title=title,
                 content=content,
                 published_at=published_at,
+                thumbnail="",
             )
         slug = slugify(title)
-        # Avoid slug collisions by appending a counter
         base_slug = slug
         counter = 1
         while os.path.exists(article_path(slug)):
             slug = f"{base_slug}-{counter}"
             counter += 1
+        thumbnail = save_thumbnail(request.files.get("thumbnail")) or ""
         save_article(
             {
                 "title": title,
                 "slug": slug,
                 "content": content,
                 "published_at": published_at,
+                "thumbnail": thumbnail
             }
         )
         flash(f'Article "{title}" published successfully.', "success")
         return redirect(url_for("admin_dashboard"))
+    
     return render_template(
         "admin/add.html",
         title="",
         content="",
         published_at=str(date.today()),
+        thumbnail="",
     )
 
 @app.route("/admin/edit/<slug>", methods=["GET", "POST"])
@@ -170,9 +195,12 @@ def admin_edit(slug):
                 content=content,
                 published_at=published_at,
             )
+
+        new_thumb = save_thumbnail(request.files.get("thumbnail"))
         art["title"] = title
         art["content"] = content
         art["published_at"] = published_at
+        art["thumbnail"] = new_thumb if new_thumb is not None else art.get("thumbnail", "")
         save_article(art)
         flash(f'Article "{title}" updated successfully.', "success")
         return redirect(url_for("admin_dashboard"))
@@ -182,6 +210,7 @@ def admin_edit(slug):
         title=art["title"],
         content=art["content"],
         published_at=art["published_at"],
+        thumbnail=art.get("thumbnail", "")
     )
 
 @app.route("/admin/delete/<slug>", methods=["POST"])
