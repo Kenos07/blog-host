@@ -9,7 +9,7 @@
 <body>
 
     <header class="site-header">
-        <div class="container">
+        <div class="container container--wide">
             <a href="{{ url_for('home') }}" class="site-title">📝 My Blog</a>
 
             <nav class="site-nav">
@@ -24,7 +24,7 @@
         </div>
     </header>
 
-    <main class="container">
+    <main class="container {% block main_class %}{% endblock %}">
         {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             {% for category, message in messages %}
@@ -36,7 +36,7 @@
     </main>
 
     <footer class="site-footer">
-        <div class="container">
+        <div class="container container--wide">
         <p>&copy; {{ now.year if now is defined else 2026 }} My Blog. All rights reserved.</p>
         </div>
     </footer>

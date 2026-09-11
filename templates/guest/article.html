@@ -5,11 +5,28 @@
 <article class="article-full">
     <header class="article-full__header">
         <a href="{{ url_for('home') }}" class="back-link">← Back to all articles</a>
+        {% if article.category %}
+        <div style="margin-bottom: 0.6rem;">
+            <span class="badge badge--category">{{ article.category }}</span>
+        </div>
+        {% endif %}
         <h1 class="article-full__title">{{ article.title }}</h1>
-        <time class="article-full__date" datetime="{{ article.published_at }}">
-        Published on {{ article.published_at | format_date }}
-        </time>
+        <div class="meta-badge">
+            <span class="meta-badge__author">By {{ article.author or 'Admin' }}</span>
+            <span class="meta-badge__sep">•</span>
+            <time class="article-full__date" datetime="{{ article.published_at }}">
+                Published on {{ article.published_at | format_date }}
+            </time>
+        </div>
     </header>
+
+     {% if article.thumbnail %}
+        <img
+            src="{{ url_for('static', filename='uploads/' + article.thumbnail) }}"
+            alt="{{ article.title }}"
+            class="article-full__thumbnail"
+        />
+    {% endif %}
 
     <div class="article-full__body">
         {{ article.content_html || safe }}

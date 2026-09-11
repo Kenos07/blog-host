@@ -35,6 +35,32 @@
             />
         </div>
 
+        <div class="form__row">
+            <div class="form__group">
+                <label for="category" class="form__label">Category</label>
+                <input
+                    type="text"
+                    id="category"
+                    name="category"
+                    class="form__input"
+                    value="{{ category or 'Tech' }}"
+                    placeholder="e.g. Technology, AI, Design"
+                />
+            </div>
+
+            <div class="form__group">
+                <label for="author" class="form__label">Author</label>
+                <input
+                    type="text"
+                    id="author"
+                    name="author"
+                    class="form__input"
+                    value="{{ author or 'Admin' }}"
+                    placeholder="Author name"
+                />
+            </div>
+        </div>
+
         <div class="form__group">
             <label for="thumbnail" class="form__label">Thumbnail Image</label>
             {% if thumbnail %}

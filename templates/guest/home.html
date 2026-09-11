@@ -1,48 +1,134 @@
 {% extends "base.html" %}
+
 {% block title %}Home — My Blog{% endblock %}
+
+{% block main_class %}container--wide{% endblock %}
+
 {% block content %}
-
-<section class="page-hero">
-    <h1>Welcome to My Blog</h1>
-    <p class="subtitle">Thoughts, stories, and ideas.</p>
-</section>
-
 {% if articles %}
-    <div class="article-list">
-        {% for article in articles %}
-        <article class="article-card">
-            {% if article.thumbnail %}
+    {% set featured = articles[0] %}
+    {% set remaining = articles[1:] %}
 
-            <a href="{{ url_for('article', slug=article.slug) }}" class="article-card__thumb-link">
-                <img
-                src="{{ url_for('static', filename='uploads/' + article.thumbnail) }}"
-                alt="{{ article.title }}"
-                class="article-card__thumb"
-                />
-            </a>
+    <section class="featured-hero">
 
+        <div class="featured-hero__badge-wrapper">
+            <span class="badge badge--featured">⭐ Featured Post</span>
+            {% if featured.category %}
+                <span class="badge badge--category">{{ featured.category }}</span>
+            {% endif %}
+        </div>
+
+        <div class="featured-hero__card">
+
+            {% if featured.thumbnail %}
+                <a href="{{ url_for('article', slug=featured.slug) }}" class="featured-hero__media">
+                    <img
+                        src="{{ url_for('static', filename='uploads/' + featured.thumbnail) }}"
+                        alt="{{ featured.title }}"
+                        class="featured-hero__img"
+                    />
+                </a>
+            {% else %}
+                <a href="{{ url_for('article', slug=featured.slug) }}" class="featured-hero__media featured-hero__media--fallback">
+                    <div class="featured-hero__fallback-pattern">
+                        <span class="featured-hero__fallback-icon">📰</span>
+                    </div>
+                </a>
             {% endif %}
 
-            <div class="article-card__body">
-                <div class="article-card__meta">
-                    <time datetime="{{ article.published_at }}">{{ article.published_at | format_date }}</time>
+            <div class="featured-hero__content">
+                <div class="meta-badge">
+                    <span class="meta-badge__author">By {{ featured.author or 'Admin' }}</span>
+                    <span class="meta-badge__sep">•</span>
+                    <time class="meta-badge__date" datetime="{{ featured.published_at }}">{{ featured.published_at | format_date }}</time>
                 </div>
-                <h2 class="article-card__title">
-                    <a href="{{ url_for('article', slug=article.slug) }}">{{ article.title }}</a>
-                </h2>
-                <p class="article-card__excerpt">
-                    {{ article.content | truncate(160, True, '…') }}
+
+                <h1 class="featured-hero__title">
+                    <a href="{{ url_for('article', slug=featured.slug) }}">{{ featured.title }}</a>
+                </h1>
+
+                <p class="featured-hero__excerpt">
+                    {{ featured.content | truncate(260, True, '…') }}
                 </p>
-                <a href="{{ url_for('article', slug=article.slug) }}" class="btn btn--ghost">Read more →</a>
+
+                <div class="featured-hero__footer">
+                    <a href="{{ url_for('article', slug=featured.slug) }}" class="btn btn--primary">
+                        Read Full Article →
+                    </a>
+                </div>
+
             </div>
-        </article>
-        
-        {% endfor %}
-    </div>
+        </div>
+    </section>
+
+    {% if remaining %}
+        <div class="section-heading">
+            <div class="section-heading__title-wrap">
+                <h2>Latest Stories</h2>
+                <span class="section-heading__subtitle">Discover more thoughts, insights, and tech tutorials</span>
+            </div>
+        </div>
+
+        <div class="article-grid">
+            {% for article in remaining %}
+                <article class="grid-card">
+                    <div class="grid-card__thumb-wrap">
+                        {% if article.thumbnail %}
+
+                            <a href="{{ url_for('article', slug=article.slug) }}" class="grid-card__thumb-link">
+                                <img
+                                    src="{{ url_for('static', filename='uploads/' + article.thumbnail) }}"
+                                    alt="{{ article.title }}"
+                                    class="grid-card__thumb"
+                                    loading="lazy"
+                                />
+                            /a>
+                        
+                        {% else %}
+
+                            <a href="{{ url_for('article', slug=article.slug) }}" class="grid-card__thumb-link grid-card__thumb-link--placeholder">
+                                <div class="grid-card__placeholder">
+                                <span>📄</span>
+                                </div>
+                            </a>
+
+                        {% endif %}
+
+                        {% if article.category %}
+                            <span class="badge badge--category grid-card__category">{{ article.category }}</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="grid-card__body">
+                        <div class="grid-card__meta">
+                            <span class="grid-card__author">{{ article.author or 'Admin' }}</span>
+                            <span class="meta-badge__sep">•</span>
+                            <time datetime="{{ article.published_at }}">{{ article.published_at | format_date }}</time>
+                        </div>
+
+                        <h3 class="grid-card__title">
+                            <a href="{{ url_for('article', slug=article.slug) }}">{{ article.title }}</a>
+                        </h3>
+
+                        <p class="grid-card__excerpt">
+                            {{ article.content | truncate(130, True, '…') }}
+                        </p>
+                        <div class="grid-card__footer">
+                            <a href="{{ url_for('article', slug=article.slug) }}" class="btn btn--text">
+                                Read article <span aria-hidden="true">→</span>
+                            </a>
+                        </div>
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+    {% endif %}
+
 {% else %}
     <div class="empty-state">
+        <div class="empty-state__icon">📝</div>
         <p>No articles published yet. Check back soon!</p>
     </div>
-{% endif %}
 
+{% endif %}
 {% endblock %}
