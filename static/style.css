@@ -934,6 +934,263 @@ img {
     margin: 2rem 0;
 }
 
+/*  BLOG LIST  */
+.blog-page {
+    padding: 2rem 0 4rem;
+}
+
+.blog-page__header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    border-bottom: 2px solid var(--color-border);
+    padding-bottom: 1.25rem;
+    margin-bottom: 2.5rem;
+}
+
+.blog-page__title {
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.2;
+    margin-bottom: 0.2rem;
+}
+
+.blog-page__subtitle {
+    font-size: 0.9rem;
+    color: var(--color-muted);
+}
+
+.blog-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.blog-item {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 0;
+    border-bottom: 1px solid var(--color-border);
+    transition: background 0.15s;
+}
+
+.blog-item:first-child {
+    border-top: 1px solid var(--color-border);
+}
+
+.blog-item:hover {
+    background: #f8fafc;
+}
+
+.blog-item__media {
+    position: relative;
+    overflow: hidden;
+    background: #f1f5f9;
+    border-right: 1px solid var(--color-border);
+    /* fixed height to match the text side */
+    min-height: 180px;
+    max-height: 200px;
+}
+
+.blog-item__thumb-link {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.blog-item__thumb {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.blog-item:hover .blog-item__thumb {
+    transform: scale(1.04);
+}
+
+.blog-item__thumb-link--placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.blog-item__placeholder {
+    width: 100%;
+    height: 100%;
+    min-height: 180px;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+}
+
+.blog-item__content {
+    padding: 1.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.blog-item__meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--color-muted);
+    flex-wrap: wrap;
+}
+
+.blog-item__author {
+    font-weight: 600;
+    color: #334155;
+}
+
+.blog-item__title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 0;
+}
+.blog-item__title a {
+    color: var(--color-text);
+    text-decoration: none;
+    transition: color 0.15s;
+}
+
+.blog-item__title a:hover {
+    color: var(--color-accent);
+}
+
+.blog-item__excerpt {
+    color: var(--color-muted);
+    font-size: 0.93rem;
+    line-height: 1.65;
+    margin: 0;
+}
+
+.blog-item__read-more {
+    align-self: flex-start;
+    margin-top: 0.25rem;
+}
+
+/*  PAGINATION  */
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-border);
+    flex-wrap: wrap;
+}
+
+.pagination__pages {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+.pagination__btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.45rem 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-text);
+    background: var(--color-surface);
+    text-decoration: none;
+    transition: background 0.15s, border-color 0.15s;
+    white-space: nowrap;
+}
+
+.pagination__btn--nav:hover {
+    background: var(--color-bg);
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+    text-decoration: none;
+}
+
+.pagination__btn--disabled {
+    color: #cbd5e1;
+    cursor: not-allowed;
+    background: var(--color-bg);
+}
+
+.pagination__page {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-text);
+    border: 1px solid transparent;
+    text-decoration: none;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.pagination__page:hover {
+    background: var(--color-bg);
+    border-color: var(--color-border);
+    color: var(--color-accent);
+    text-decoration: none;
+}
+
+.pagination__page--active {
+    background: var(--color-accent);
+    color: #fff;
+    border-color: var(--color-accent);
+    font-weight: 700;
+    cursor: default;
+}
+
+.pagination__ellipsis {
+    width: 36px;
+    text-align: center;
+    color: var(--color-muted);
+    font-size: 0.875rem;
+}
+
+/*  HOME - LEARN MORE  */
+.home-more-cta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    background: linear-gradient(135deg, #eff6ff 0%, #f0fdf4 100%);
+    border: 1px solid #bfdbfe;
+    border-radius: var(--radius-lg);
+    padding: 1.5rem 2rem;
+    margin-top: 2.5rem;
+    margin-bottom: 3rem;
+}
+
+.home-more-cta__text {
+    font-size: 1rem;
+    color: var(--color-text);
+    line-height: 1.5;
+}
+
+.home-more-cta__text strong {
+    color: var(--color-accent);
+}
+
+.home-more-cta__btn {
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
 /*  RESPONSIVE SETTINGS  */
 @media (max-width: 960px) {
     .featured-hero__card {
@@ -971,4 +1228,34 @@ img {
     .dashboard-table th, .dashboard-table td { padding: 0.6rem 0.75rem; }
     .form__actions { flex-direction: column-reverse; }
     .btn--full { width: 100%; }
+}
+
+@media (max-width: 760px) {
+    .blog-item {
+        grid-template-columns: 1fr;
+        grid-template-rows: 200px auto;
+    }
+    .blog-item__media {
+        border-right: none;
+        border-bottom: 1px solid var(--color-border);
+        max-height: 200px;
+    }
+    .blog-item__content {
+        padding: 1.25rem 1.25rem;
+    }
+    .blog-page__header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .home-more-cta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+        padding: 1.25rem 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .pagination__btn--nav { padding: 0.4rem 0.65rem; font-size: 0.8rem; }
+    .pagination__page { width: 32px; height: 32px; font-size: 0.8rem; }
 }

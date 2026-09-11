@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}All Articles — Black Hat{% endblock %}
+
+{% block main_class %}container--wide{% endblock %}
+
+{% block content %}
+<div class="blog-page">
+
+    <div class="blog-page__header">
+        <div class="blog-page__header-text">
+            <h1 class="blog-page__title">All Articles</h1>
+            <p class="blog-page__subtitle">
+                {{ total }} article{{ 's' if total != 1 else '' }} published
+                {% if total_pages > 1 %} · Page {{ page }} of {{ total_pages }}{% endif %}
+            </p>
+        </div>
+        <a href="{{ url_for('home') }}" class="btn btn--ghost btn--sm">← Back to Home</a>
+    </div>
+
+    {% if articles %}
+    <div class="blog-list">
+        {% for article in articles %}
+        <article class="blog-item">
+
+            <div class="blog-item__media">
+                {% if article.thumbnail %}
+                    <a href="{{ url_for('article', slug=article.slug) }}" class="blog-item__thumb-link">
+                        <img
+                            src="{{ url_for('static', filename='uploads/' + article.thumbnail) }}"
+                            alt="{{ article.title }}"
+                            class="blog-item__thumb"
+                            loading="lazy"
+                        />
+                    </a>
+                {% else %}
+                    <a href="{{ url_for('article', slug=article.slug) }}" class="blog-item__thumb-link blog-item__thumb-link--placeholder">
+                        <div class="blog-item__placeholder">
+                        <span>📄</span>
+                        </div>
+                    </a>
+                {% endif %}
+            </div>
+
+            <div class="blog-item__content">
+                <div class="blog-item__meta">
+                    {% if article.category %}
+                        <span class="badge badge--category">{{ article.category }}</span>
+                    {% endif %}
+                    <span class="blog-item__author">{{ article.author or 'Admin' }}</span>
+                    <span class="meta-badge__sep">•</span>
+                    <time datetime="{{ article.published_at }}">{{ article.published_at | format_date }}</time>
+                </div>
+
+                <h2 class="blog-item__title">
+                    <a href="{{ url_for('article', slug=article.slug) }}">{{ article.title }}</a>
+                </h2>
+
+                <p class="blog-item__excerpt">
+                    {{ article.content | truncate(220, True, '…') }}
+                </p>
+
+                <a href="{{ url_for('article', slug=article.slug) }}" class="btn btn--ghost btn--sm blog-item__read-more">
+                Read article →
+                </a>
+            </div>
+
+        </article>
+    {% endfor %}
+    </div>
+
+    {% if total_pages > 1 %}
+        <nav class="pagination" aria-label="Article pagination">
+            {% if page > 1 %}
+                <a href="{{ url_for('blog', page=page-1) }}" class="pagination__btn pagination__btn--nav" aria-label="Previous page">
+                    ← Prev
+                </a>
+            {% else %}
+                <span class="pagination__btn pagination__btn--nav pagination__btn--disabled">← Prev</span>
+            {% endif %}
+
+            <div class="pagination__pages">
+                {% for p in range(1, total_pages + 1) %}
+                    {% if p == page %}
+                        <span class="pagination__page pagination__page--active">{{ p }}</span>
+                    {% elif p == 1 or p == total_pages or (p >= page - 2 and p <= page + 2) %}
+                        <a href="{{ url_for('blog', page=p) }}" class="pagination__page">{{ p }}</a>
+                    {% elif p == page - 3 or p == page + 3 %}
+                        <span class="pagination__ellipsis">…</span>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            {% if page < total_pages %}
+                <a href="{{ url_for('blog', page=page+1) }}" class="pagination__btn pagination__btn--nav" aria-label="Next page">
+                    Next →
+                </a>
+            {% else %}
+                <span class="pagination__btn pagination__btn--nav pagination__btn--disabled">Next →</span>
+            {% endif %}
+        </nav>
+    {% endif %}
+
+    {% else %}
+        <div class="empty-state">
+            <div class="empty-state__icon">📝</div>
+            <h2>No articles yet</h2>
+            <p>Check back soon — new articles are on the way!</p>
+        </div>
+  {% endif %}
+
+</div>
+{% endblock %}

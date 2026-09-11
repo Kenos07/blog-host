@@ -62,15 +62,21 @@
     </section>
 
     {% if remaining %}
+        {% set grid_articles = remaining[:6] %}
+        {% set has_more = remaining | length > 6 %}
+
         <div class="section-heading">
             <div class="section-heading__title-wrap">
                 <h2>Latest Stories</h2>
                 <span class="section-heading__subtitle">Discover more thoughts, insights, and tech tutorials</span>
             </div>
+            {% if has_more %}
+                <a href="{{ url_for('blog') }}" class="btn btn--ghost bth--sm">View all</a>
+            {% endif %}
         </div>
 
         <div class="article-grid">
-            {% for article in remaining %}
+            {% for article in grid_articles %}
                 <article class="grid-card">
                     <div class="grid-card__thumb-wrap">
                         {% if article.thumbnail %}
@@ -122,6 +128,17 @@
                 </article>
             {% endfor %}
         </div>
+
+        {% if has_more %}
+            <div class="home-more-cta">
+                <p class="home-more-cta__text">
+                There are <strong>{{ remaining | length - 6 }}</strong> more article{{ 's' if remaining | length - 6 != 1 else '' }} waiting for you.
+                </p>
+                <a href="{{ url_for('blog') }}" class="btn btn--primary home-more-cta__btn">
+                View All Articles →
+                </a>
+            </div>
+        {% endif %}
     {% endif %}
 
 {% else %}

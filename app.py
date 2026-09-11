@@ -133,6 +133,28 @@ def home():
     articles = list_articles()
     return render_template("guest/home.html", articles=articles)
 
+PER_PAGE = 8
+
+@app.route("/blog")
+def blog():
+    all_articles = list_articles()
+    total = len(all_articles)
+    try:
+        page = max(1, int(request.args.get("page", 1)))
+    except (TypeError, ValueError):
+        page = 1
+    total_pages = max(1, (total + PER_PAGE - 1) // PER_PAGE)
+    page = min(page, total_pages)
+    start = (page - 1) * PER_PAGE
+    page_articles = all_articles[start : start + PER_PAGE]
+    return render_template(
+        "guest/blog.html",
+        articles=page_articles,
+        page=page,
+        total_pages=total_pages,
+        total=total,
+    )
+
 @app.route("/article/<slug>")
 def article(slug):
     art = load_article(slug)
