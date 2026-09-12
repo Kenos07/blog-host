@@ -11,13 +11,6 @@
 
     <section class="featured-hero">
 
-        <div class="featured-hero__badge-wrapper">
-            <span class="badge badge--featured">⭐ Featured Post</span>
-            {% if featured.category %}
-                <span class="badge badge--category">{{ featured.category }}</span>
-            {% endif %}
-        </div>
-
         <div class="featured-hero__card">
 
             {% if featured.thumbnail %}
@@ -38,7 +31,6 @@
 
             <div class="featured-hero__content">
                 <div class="meta-badge">
-                    <span class="meta-badge__author">By {{ featured.author or 'Admin' }}</span>
                     <span class="meta-badge__sep">•</span>
                     <time class="meta-badge__date" datetime="{{ featured.published_at }}">{{ featured.published_at | format_date }}</time>
                 </div>
@@ -68,7 +60,7 @@
         <div class="section-heading">
             <div class="section-heading__title-wrap">
                 <h2>Latest Stories</h2>
-                <span class="section-heading__subtitle">Discover more thoughts, insights, and tech tutorials</span>
+                <span class="section-heading__subtitle">Discover more</span>
             </div>
             {% if has_more %}
                 <a href="{{ url_for('blog') }}" class="btn btn--ghost bth--sm">View all</a>
@@ -99,15 +91,11 @@
                             </a>
 
                         {% endif %}
-
-                        {% if article.category %}
-                            <span class="badge badge--category grid-card__category">{{ article.category }}</span>
-                        {% endif %}
                     </div>
 
                     <div class="grid-card__body">
                         <div class="grid-card__meta">
-                            <span class="grid-card__author">{{ article.author or 'Admin' }}</span>
+
                             <span class="meta-badge__sep">•</span>
                             <time datetime="{{ article.published_at }}">{{ article.published_at | format_date }}</time>
                         </div>

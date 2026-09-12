@@ -8,13 +8,11 @@
 <div class="blog-page">
 
     <div class="blog-page__header">
-        <div class="blog-page__header-text">
-            <h1 class="blog-page__title">All Articles</h1>
-            <p class="blog-page__subtitle">
-                {{ total }} article{{ 's' if total != 1 else '' }} published
-                {% if total_pages > 1 %} · Page {{ page }} of {{ total_pages }}{% endif %}
-            </p>
-        </div>
+        <h1 class="blog-page__title">All Articles</h1>
+        <p class="blog-page__subtitle">
+            {{ total }} article{{ 's' if total != 1 else '' }} published
+            {% if total_pages > 1 %} · Page {{ page }} of {{ total_pages }}{% endif %}
+        </p>
         <a href="{{ url_for('home') }}" class="btn btn--ghost btn--sm">← Back to Home</a>
     </div>
 
@@ -44,10 +42,7 @@
 
             <div class="blog-item__content">
                 <div class="blog-item__meta">
-                    {% if article.category %}
-                        <span class="badge badge--category">{{ article.category }}</span>
-                    {% endif %}
-                    <span class="blog-item__author">{{ article.author or 'Admin' }}</span>
+
                     <span class="meta-badge__sep">•</span>
                     <time datetime="{{ article.published_at }}">{{ article.published_at | format_date }}</time>
                 </div>

@@ -6,8 +6,6 @@ ADMIN_PASSWORD = "admin"
 
 SECRET_KEY = "anothershit"
 
-ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif"}
-
 IMAGE_EXTENSIONS = {"png", "jpg", "jpeg", "gif", "webp", "avif"}
 VIDEO_EXTENSIONS = {"mp4", "mov", "ogg", "webm", "quicktime"}
 MEDIA_EXTENSIONS = IMAGE_EXTENSIONS | VIDEO_EXTENSIONS

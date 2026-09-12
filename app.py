@@ -37,8 +37,7 @@ def load_article(slug: str) -> dict | None:
         "slug": post.metadata.get("slug", slug),
         "published_at": _normalize_datetime(post.metadata.get("published_at", "")),
         "thumbnail": post.metadata.get("thumbnail", ""),
-        "category": post.metadata.get("category", "Tech"),
-        "author":post.metadata.get("author", "Admin"),
+
         "content": post.content,
     }
 
@@ -49,8 +48,7 @@ def save_article(data: dict) -> None:
         slug=data["slug"],
         published_at=data["published_at"],
         thumbnail=data.get("thumbnail", ""),
-        category=data.get("category", "Tech"),
-        author=data.get("author", "Admin"),
+
     )
     path = article_path(data["slug"])
     with open(path, "w", encoding="utf-8") as f:
@@ -212,8 +210,7 @@ def admin_add():
     if request.method == "POST":
         title = request.form.get("title", "").strip()
         content = request.form.get("content", "").strip()
-        category = request.form.get("category", "General").strip() or "General"
-        author = request.form.get("author", "Admin").strip() or "Admin"
+
         published_at = request.form.get("published_at", dt.datetime.now().strftime("%Y-%m-%dT%H:%M"))
 
         if not title or not content:
@@ -222,8 +219,6 @@ def admin_add():
                 "admin/add.html",
                 title=title,
                 content=content,
-                category=category,
-                author=author,
                 published_at=published_at,
                 thumbnail="",
             )
@@ -241,8 +236,7 @@ def admin_add():
                 "content": content,
                 "published_at": published_at,
                 "thumbnail": thumbnail,
-                "category": category,
-                "author": author,
+
             }
         )
         flash(f'Article "{title}" published successfully.', "success")
@@ -252,8 +246,7 @@ def admin_add():
         "admin/add.html",
         title="",
         content="",
-        category="Tech",
-        author="Admin",
+
         published_at=str(dt.datetime.now().strftime("%Y-%m-%dT%H:%M")),
         thumbnail="",
     )
@@ -267,8 +260,7 @@ def admin_edit(slug):
     if request.method == "POST":
         title = request.form.get("title", "").strip()
         content = request.form.get("content", "").strip()
-        category = request.form.get("category", "General").strip() or "General"
-        author = request.form.get("author", "Admin").strip() or "Admin"
+
         published_at = request.form.get("published_at", art["published_at"])
         if not title or not content:
             flash("Title and content are required.", "error")
@@ -277,16 +269,14 @@ def admin_edit(slug):
                 article=art,
                 title=title,
                 content=content,
-                category=category,
-                author=author,
+
                 published_at=published_at,
             )
 
         new_thumb = save_thumbnail(request.files.get("thumbnail"))
         art["title"] = title
         art["content"] = content
-        art["category"] = category
-        art["author"] = author
+
         art["published_at"] = published_at
         art["thumbnail"] = new_thumb if new_thumb is not None else art.get("thumbnail", "")
         save_article(art)
@@ -297,8 +287,7 @@ def admin_edit(slug):
         article=art,
         title=art["title"],
         content=art["content"],
-        category=art.get("category", "Tech"),
-        author=art.get("author", "Admin"),
+
         published_at=art["published_at"],
         thumbnail=art.get("thumbnail", "")
     )
